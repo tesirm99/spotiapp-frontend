@@ -18,13 +18,13 @@
           <ion-label class="label-title">Enter your data</ion-label>
         </ion-item>
         <ion-item>
-          <ion-label position="floating" color="primary">Email: </ion-label>
-          <ion-input type="text" formControlName="email"></ion-input>
+          <ion-label position="floating" color="primary">Username: </ion-label>
+          <ion-input type="text" formControlName="username"></ion-input>
         </ion-item>
         <div> 
-          <ng-container *ngFor="let validation of formValidationMessages.email">
+          <ng-container *ngFor="let validation of formValidationMessages.username">
             <div class="error-message"
-              *ngIf="formValidation?.get('email')?.hasError(validation.type) && (formValidation.get('email')?.dirty || formValidation.get('email')?.touched)">
+              *ngIf="formValidation?.get('username')?.hasError(validation.type) && (formValidation.get('username')?.dirty || formValidation.get('username')?.touched)">
               {{ validation.message }}
             </div>
           </ng-container>

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Song } from 'src/app/interfaces/song.interface';
+import { SongsService } from 'src/app/services/songs.service';
 
 @Component({
   selector: 'app-search',
@@ -7,8 +9,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SearchComponent  implements OnInit {
 
-  constructor() { }
+  constructor(private songService: SongsService) { }
 
-  ngOnInit() {}
+  songs: Song[] = [];
+
+  async ngOnInit() {
+
+    this.songs = await this.songService.getSongs();
+
+  }
 
 }

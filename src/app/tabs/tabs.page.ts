@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-tabs',
@@ -6,13 +7,19 @@ import { Component } from '@angular/core';
   styleUrls: ['tabs.page.scss']
 })
 export class TabsPage {
+  
   tab3Text = 'Login';
-  constructor() {}
+  isLogged: boolean = false;
+  
+  constructor(private authService: AuthService) {}
 
   ngOnInit() {
-    //if is logged in tab3Text = 'Profile'
-    //else tab3Text = 'Login'
-
+    this.isLogged = this.authService.isLogged();
+    if (this.isLogged) {
+      this.tab3Text = 'Profile'
+    } else {
+      this.tab3Text = 'Login'
+    }
   }
 
 }

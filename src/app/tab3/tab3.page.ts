@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-tab3',
@@ -13,9 +15,9 @@ export class Tab3Page {
   errorMessage: string = ''; 
 
   formValidationMessages = { 
-   'email': [
-     { type: 'required', message: 'El email es un campo obligatorio.' },
-     { type: 'pattern', message: 'El formato del email no es correcto.' }
+   'username': [
+     { type: 'required', message: 'El username es un campo obligatorio.' },
+     { type: 'pattern', message: 'El formato del username no es correcto.' }
    ],
    'password': [
      { type: 'required', message: 'La contraseña es un campo obligatorio.' },
@@ -25,34 +27,50 @@ export class Tab3Page {
 
   isLogged: boolean = false;
   userData: any = {};
-  constructor(private authService: AuthService, private formBuilder: FormBuilder) {}
+  constructor(private authService: AuthService, private formBuilder: FormBuilder, private router: Router) {}
 
   ngOnInit() {
     //getUserdata
     this.userData.name = "test";
 
+    this.isLogged = this.authService.isLogged();
+
     this.formValidation = this.formBuilder.group({
-      email: new FormControl('', Validators.compose([
+      username: new FormControl('', Validators.compose([
         Validators.required,
-        Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
       ])),
       password: new FormControl('', Validators.compose([
-        Validators.minLength(6),
+        Validators.minLength(4),
         Validators.required
       ])),
     });
   }
 
   logout() {
+    this.authService.logout();
+    this.isLogged = false;
+    this.router.navigate(['/tabs/tab1']);
+  }
+
+  async login(value: { username: string; password: string; }) {
+    this.isLogged = await this.authService.loginToAPI(value.username, value.password);
+    console.log(this.isLogged);
+    if (this.isLogged) {
+      this.router.navigate(['/tabs/tab1']);
+    } else {
+      this.errorMessage = "Usuario o contraseña incorrectos";
+    }
 
   }
 
-  login(value: { email: string; password: string; }) {
+  async register(value: {username: string; password: string; }) {
 
-  }
-
-  register() {
-
+    let registerOk = await this.authService.registerToAPI(value.username, value.password);
+    if (registerOk) {
+      this.router.navigate(['/tabs/tab1']);
+    } else {
+      this.errorMessage = "No se ha podido registrar el usuario";
+    }
   }
 
 
