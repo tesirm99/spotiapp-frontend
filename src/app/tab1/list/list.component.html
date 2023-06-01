@@ -1,23 +1,4 @@
 <div class="filterContainer">
-  <div class="filterForm">
-    <div class="filterItem">
-      <input type="radio"/>
-      <label>Name</label>
-    </div>
-    <div class="filterItem">
-      <input type="radio"/>
-      <label>Artist</label>
-    </div>
-    <div class="filterItem">
-      <input type="radio"/>
-      <label>Date</label>
-    </div>
-
-    <div class="filterItem">
-      <input  type="text" placeholder="Search"/>
-      <button>Search</button>
-    </div>
-  </div>
   <div>
     <div *ngIf="this.songs.length == 0">
       <h1 class="text-center">No hay canciones</h1>
@@ -26,7 +7,7 @@
       <ion-list>
         <ion-item *ngFor="let song of songs">
           <ion-avatar slot="start">
-            <img [src]="song.images[0]">
+            <img [src]="song.image">
           </ion-avatar>
           <ion-label>
             <h2>{{ song.name }}</h2>

@@ -1,32 +1,36 @@
 <div class="filterContainer">
   <div class="filterForm">
     <div class="filterItem">
-      <input type="radio"/>
+      <input type="radio" name="tipoBusqueda" value="nombre" [(ngModel)]="tipoBusqueda" (change)="resetTerminoBusqueda()" />
       <label>Name</label>
     </div>
     <div class="filterItem">
-      <input type="radio"/>
+      <input type="radio" name="tipoBusqueda" value="artista" [(ngModel)]="tipoBusqueda" (change)="resetTerminoBusqueda()" />
       <label>Artist</label>
     </div>
     <div class="filterItem">
-      <input type="radio"/>
+      <input type="radio" name="tipoBusqueda" value="fecha" [(ngModel)]="tipoBusqueda" (change)="resetTerminoBusqueda()" />
       <label>Date</label>
     </div>
-
+    <div *ngIf="this.isLogged" class="filterItem">
+      <input type="radio" name="tipoBusqueda" value="spotify" [(ngModel)]="tipoBusqueda" (change)="resetTerminoBusqueda()" />
+      <label>Use Spotify</label>
+    </div>
     <div class="filterItem">
-      <input  type="text" placeholder="Search"/>
-      <button>Search</button>
+      <input  type="text" [(ngModel)]="terminoBusqueda" *ngIf="tipoBusqueda !== 'fecha'" placeholder="Search"/>
+      <input  type="date" [(ngModel)]="terminoBusqueda" *ngIf="tipoBusqueda === 'fecha'"/>
+      <button (click)="buscar()">Search</button>
     </div>
   </div>
   <div>
     <div *ngIf="this.songs.length == 0">
-      <h1 class="text-center">No hay canciones</h1>
+      <h1 class="text-center">{{textoPatata}}</h1>
     </div>
     <div *ngIf="this.songs.length > 0">  
       <ion-list>
         <ion-item *ngFor="let song of songs">
           <ion-avatar slot="start">
-            <img [src]="song.images[0]">
+            <img [src]="song.image">
           </ion-avatar>
           <ion-label>
             <h2>{{ song.name }}</h2>

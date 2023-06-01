@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Song } from '../interfaces/song.interface';
 import { Comment } from '../interfaces/comment.interface';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +11,7 @@ export class SongsService {
 
   songAPIURL = "http://localhost:3000/songs";
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
   async getSongs(): Promise<Song[]> {
     let res = await fetch(this.songAPIURL, {
@@ -63,44 +65,20 @@ export class SongsService {
     return await res.json();
   }
 
-  async searchSongFromSpotify(name: string): Promise<Song[]> {
-    let res = await fetch(this.songAPIURL + '/fetchSongsFromSpotify/' + name, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-    return await res.json();
+  searchSongFromSpotify(name: string): Observable<Song[]> {
+    return this.http.get<Song[]>(this.songAPIURL + '/fetchSongsFromSpotify/' + name, { headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('token') } });
   }
 
-  async searchSongByName(name: string): Promise<Song[]> {
-    let res = await fetch(this.songAPIURL + '/search/' + name, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-    return await res.json();
+  searchSongByName(name: string): Observable<Song[]> {
+    return this.http.get<Song[]>(this.songAPIURL + '/searchByName/' + name);
   }
 
-  async searchSongByArtist(artist: string): Promise<Song[]> {
-    let res = await fetch(this.songAPIURL + '/searchByArtist/' + artist, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-    return await res.json();
+  searchSongByArtist(artist: string): Observable<Song[]> {
+    return this.http.get<Song[]>(this.songAPIURL + '/searchByArtist/' + artist);
   }
 
-  async searchSongByDate(date: string): Promise<Song[]> {
-    let res = await fetch(this.songAPIURL + '/searchByDate/' + date, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-    return await res.json();
+  searchSongByDate(date: string): Observable<Song[]> {
+    return this.http.get<Song[]>(this.songAPIURL + '/searchByDate/' + date);
   }
 
 

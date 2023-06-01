@@ -45,6 +45,10 @@ export class Tab3Page {
       ])),
     });
   }
+  
+  ngDoCheck() {
+    this.isLogged = this.authService.isLogged();
+  }
 
   logout() {
     this.authService.logout();

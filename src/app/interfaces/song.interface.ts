@@ -1,12 +1,12 @@
 export interface Song {
-    _id: string;
+    _id?: string;
     name: string;
     artist: string;
     album: string;
     releaseDate: number;
     genre: string;
     duration: number;
-    images: string[];
+    image: string;
     href: string;
     popularity: number;
     geolocation: [number, number];
