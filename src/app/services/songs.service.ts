@@ -34,11 +34,13 @@ export class SongsService {
   }
 
   async createSong(song: any) {
-    let res = await fetch(this.songAPIURL, {
+    
+    let res = await fetch(this.songAPIURL + '/newsong', {
       method: 'POST',
       body: JSON.stringify(song),
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
       }
     });
     return await res.json();
@@ -81,6 +83,16 @@ export class SongsService {
     return this.http.get<Song[]>(this.songAPIURL + '/searchByDate/' + date);
   }
 
-
+  async commentToSong(comment: Comment, songId: string) {
+    let res = await fetch(this.songAPIURL + '/' + songId + '/comments', {
+      method: 'POST',
+      body: JSON.stringify(comment),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
+      }
+    });
+    return await res.json();
+  }
 
 }

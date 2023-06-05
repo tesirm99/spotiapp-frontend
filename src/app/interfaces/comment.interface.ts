@@ -1,7 +1,7 @@
 export interface Comment {
-    _id: string;
+    _id?: string;
     author: string;
-    comment: string;
-    date: Date;
+    commentText: string;
+    date: string;
     stars: number;
 }

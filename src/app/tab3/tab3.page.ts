@@ -25,6 +25,7 @@ export class Tab3Page {
    ]
  };
 
+  isInLogin: boolean = true;
   isLogged: boolean = false;
   userData: any = {};
   constructor(private authService: AuthService, private formBuilder: FormBuilder, private router: Router) {}
@@ -57,26 +58,45 @@ export class Tab3Page {
   }
 
   async login(value: { username: string; password: string; }) {
-    this.isLogged = await this.authService.loginToAPI(value.username, value.password);
-    console.log(this.isLogged);
-    if (this.isLogged) {
-      this.router.navigate(['/tabs/tab1']);
+
+    if(this.isInLogin){
+      console.log("login");
+      this.isLogged = await this.authService.login(value.username, value.password);
+      console.log(this.isLogged);
+      if (this.isLogged) {
+        this.router.navigate(['/tabs/tab1']);
+      } else {
+        this.errorMessage = "Usuario o contraseña incorrectos";
+      }  
     } else {
-      this.errorMessage = "Usuario o contraseña incorrectos";
+      console.log("register");
+      let register = await this.authService.register(value.username, value.password);
+      console.log(register);
+      if (register) {
+        this.router.navigate(['/tabs/tab1']);
+      } else {
+        this.errorMessage = "Algo ha salido mal durante el registro";
+      }
     }
+
+    
 
   }
 
   async register(value: {username: string; password: string; }) {
 
-    let registerOk = await this.authService.registerToAPI(value.username, value.password);
+    let registerOk = await this.authService.register(value.username, value.password);
     if (registerOk) {
       this.router.navigate(['/tabs/tab1']);
+      // TODO: poner un toast de que se ha registrado correctamente y se ha autologeado
     } else {
       this.errorMessage = "No se ha podido registrar el usuario";
     }
   }
 
+  goToRegister() {
+    this.isInLogin = !this.isInLogin;
+  }
 
 
 }

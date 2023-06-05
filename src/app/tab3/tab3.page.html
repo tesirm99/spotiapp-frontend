@@ -41,8 +41,13 @@
             </div>
           </ng-container>
         </div>
-        <div class="div-button-login"> 
+        <div class="div-button-login" *ngIf="isInLogin"> 
           <ion-button type="submit" [disabled]="!formValidation.valid">Login</ion-button>
+          <ion-button (click)="goToRegister()">I dont have an account</ion-button>
+        </div>
+        <div class="div-button-login" *ngIf="!isInLogin"> 
+          <ion-button type="submit" [disabled]="!formValidation.valid">Signup</ion-button>
+          <ion-button (click)="goToRegister()">I already have an account</ion-button>
         </div>
         <div class="div-label-error"> 
           <ion-label class="error-message">{{ errorMessage }}</ion-label>

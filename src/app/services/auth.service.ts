@@ -9,11 +9,7 @@ export class AuthService {
 
   }
 
-  loginToFB(email: string, password: string) {
-    // return this.afAuth.auth.signInWithEmailAndPassword(email, password);
-  }
-
-  async loginToAPI(username: string, password: string): Promise<boolean> {
+  async login(username: string, password: string): Promise<boolean> {
     let res = await fetch('http://localhost:3000/users/signin', {
       method: 'POST',
       body: JSON.stringify({
@@ -45,13 +41,11 @@ export class AuthService {
     //   return false;
     // });
     
+    // TODO: login to Firebase
   }
 
-  registerToFB(email: string, password: string) {
-    // return this.afAuth.auth.createUserWithEmailAndPassword(email, password);
-  }
 
-  async registerToAPI(email: string, password: string): Promise<boolean> {
+  async register(email: string, password: string): Promise<boolean> {
     let res = await fetch('http://localhost:3000/users/signup', {
       method: 'POST',
       body: JSON.stringify({
@@ -64,10 +58,15 @@ export class AuthService {
     });
 
     if(res.status == 200) {
+      let accessInfo = await res.json();
+      localStorage.setItem('token', accessInfo.token);
+      localStorage.setItem('id', accessInfo.id);
       return true;
     } else {
       return false;
     }
+
+    // TODO: register in Firebase
   }
 
   logout() {
@@ -81,5 +80,23 @@ export class AuthService {
     } else {
       return false;
     }
+  }
+
+  async getUser(): Promise<string> {
+    let res = await fetch('http://localhost:3000/users/getById/' + localStorage.getItem('id'), {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('token')!
+      },
+    });
+
+    if(res.status == 200) {
+      let user = await res.text();
+      return user;
+    } else {
+      return "Jane Doe";
+    }
+
   }
 }

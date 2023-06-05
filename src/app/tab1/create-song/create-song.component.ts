@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Song } from 'src/app/interfaces/song.interface';
 import { SongsService } from 'src/app/services/songs.service';
 import { Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-song',
@@ -58,7 +59,7 @@ export class CreateSongComponent  implements OnInit {
 
  };
 
-  constructor(private songService: SongsService, private formBuilder: FormBuilder) { }
+  constructor(private songService: SongsService, private formBuilder: FormBuilder, private router: Router) { }
 
 
   ngOnInit() {
@@ -93,9 +94,13 @@ export class CreateSongComponent  implements OnInit {
     });
   }
 
-  insertarCancion() {
+  async insertarCancion() {
     // Realiza una solicitud POST a la API para insertar la canción
     console.log('Insertar canción:', this.song, this.formValidation);
+    let res = await this.songService.createSong(this.song);
+
+    console.log('Insertar canción:', res);
+    this.router.navigate(['/tabs/tab1']);
   }
 }
 

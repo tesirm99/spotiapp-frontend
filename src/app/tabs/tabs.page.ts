@@ -22,4 +22,8 @@ export class TabsPage {
     }
   }
 
+  ngDoCheck() {
+    this.isLogged = this.authService.isLogged();
+  }
+
 }

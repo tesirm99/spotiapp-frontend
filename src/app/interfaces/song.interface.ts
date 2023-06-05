@@ -1,3 +1,4 @@
+import { Comment } from './comment.interface';
 export interface Song {
     _id?: string;
     name: string;

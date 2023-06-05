@@ -13,6 +13,7 @@
             <h2>{{ song.name }}</h2>
             <p>{{ song.artist }}</p>
           </ion-label>
+          <ion-button (click)="goToSongDetail(song._id!)">View</ion-button>
         </ion-item>
       </ion-list>
     </div>

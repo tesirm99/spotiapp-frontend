@@ -26,18 +26,24 @@
     <div *ngIf="this.songs.length == 0">
       <h1 class="text-center">{{textoPatata}}</h1>
     </div>
-    <div *ngIf="this.songs.length > 0">  
+    <div *ngIf="this.songs.length > 0">
+      <div *ngIf="tipoBusqueda == 'spotify'">
+        <ion-button [disabled]="!areSongsSelected()" (click)="addSelectedSongs()">Add selected songs</ion-button>
+      </div>
       <ion-list>
-        <ion-item *ngFor="let song of songs">
-          <ion-avatar slot="start">
-            <img [src]="song.image">
-          </ion-avatar>
+        <ion-item *ngFor="let song of this.songs">
+          <img src="{{song.image}}" alt="Could not load image"/>
           <ion-label>
             <h2>{{ song.name }}</h2>
             <p>{{ song.artist }}</p>
           </ion-label>
+          <input *ngIf="tipoBusqueda == 'spotify'" type="checkbox" [checked]="selectedSongs!.get(song)" (change)="selectSong(song)">
+          <ion-button *ngIf="tipoBusqueda != 'spotify'" (click)="goToSongDetail(song._id!)">View</ion-button>
         </ion-item>
       </ion-list>
+    </div>
+    <div *ngIf="this.songs.length < 1">
+      <p>There are no songs to display</p>
     </div>
   </div>
 </div>
