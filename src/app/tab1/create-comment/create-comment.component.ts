@@ -16,6 +16,8 @@ export class CreateCommentComponent  implements OnInit {
 
   rating: number = 0;
   commentText: string = "";
+  author: string = "";
+
   constructor(private songService: SongsService, private activatedRoute: ActivatedRoute, private router: Router, private authService: AuthService) { }
 
   async ngOnInit() {
@@ -24,7 +26,6 @@ export class CreateCommentComponent  implements OnInit {
   }
 
   async submitForm(){
-    let usr = await this.authService.getUser();
     const date = new Date();
 
     const day = date.getDate().toString().padStart(2, '0');
@@ -35,18 +36,20 @@ export class CreateCommentComponent  implements OnInit {
       author: '',
       commentText: '',
       date: '',
-      stars: 0
+      stars: 0,
+      geolocation: [0, 0],
+      authorId: ''
     };
     newComment.commentText = this.commentText;
     newComment.stars = this.rating;
-    newComment.author = usr || "Jane Doe";
+    newComment.author = this.author;
     newComment.date = `${day}/${month}/${year}`;
   
     console.log(newComment);
     let res = await this.songService.commentToSong(newComment, this.song._id!);
 
     console.log(res);
-    
+    this.router.navigate(['/tabs/tab1/details', this.song._id]);
   }
 
 }

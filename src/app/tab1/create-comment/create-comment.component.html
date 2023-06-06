@@ -12,6 +12,10 @@
 
   <form (ngSubmit)="submitForm()">
     <div>
+      <ion-label for="author">Comment:</ion-label>
+      <ion-input id="author" [(ngModel)]="author" name="author" required></ion-input>
+    </div>
+    <div>
       <ion-label for="comment">Comment:</ion-label>
       <textarea id="comment" [(ngModel)]="commentText" name="commentText" required></textarea>
     </div>

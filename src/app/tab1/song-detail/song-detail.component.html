@@ -4,13 +4,13 @@
       <ion-buttons slot="start">
         <ion-back-button></ion-back-button>
       </ion-buttons>
-      <ion-title>
+      <ion-title *ngIf="song">
         {{ song.name }} details
       </ion-title>
     </ion-toolbar>
   </ion-header>
 
-  <ion-card>
+  <ion-card *ngIf="song">
     <h1>{{song.name}}</h1>
     <h2>{{song.artist}}</h2>
     <img [src]="song.image" alt="song image">
@@ -25,18 +25,8 @@
     </div-->
   </ion-card>
   <ion-button (click)="addComment()">Add comment</ion-button>
-  <div *ngIf="song.comments.length == 0 || song.comments.length == undefined">
-    <h2>There are no comments for this song yet</h2>
-  </div>
-  <ion-list *ngIf="song.comments.length > 0">
-    <ion-item *ngFor="let comment of song.comments">
-      <ion-label>
-        <h2>{{comment.author}}</h2>
-        <p>{{comment.commentText}}</p>
-        <span>{{comment.date}}</span>
-        <!--span>{{comment.stars}}</span-->
-      </ion-label>
-    </ion-item>
-  </ion-list>
+<div *ngIf="song">
+  <app-comments [songId]="song._id"></app-comments>
 
+</div>
 </ion-content>

@@ -15,10 +15,10 @@ export class Tab3Page {
   errorMessage: string = ''; 
 
   formValidationMessages = { 
-   'username': [
-     { type: 'required', message: 'El username es un campo obligatorio.' },
-     { type: 'pattern', message: 'El formato del username no es correcto.' }
-   ],
+    'email': [
+      { type: 'required', message: 'El email es un campo obligatorio.' },
+      { type: 'pattern', message: 'El formato del email no es correcto.' }
+    ],
    'password': [
      { type: 'required', message: 'La contraseña es un campo obligatorio.' },
      { type: 'minlength', message: 'La lóngitud mínima de una contraseña es 6 caracteres.' }
@@ -37,11 +37,12 @@ export class Tab3Page {
     this.isLogged = this.authService.isLogged();
 
     this.formValidation = this.formBuilder.group({
-      username: new FormControl('', Validators.compose([
+      email: new FormControl('', Validators.compose([
         Validators.required,
+        Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
       ])),
       password: new FormControl('', Validators.compose([
-        Validators.minLength(4),
+        Validators.minLength(6),
         Validators.required
       ])),
     });
@@ -57,11 +58,11 @@ export class Tab3Page {
     this.router.navigate(['/tabs/tab1']);
   }
 
-  async login(value: { username: string; password: string; }) {
+  async login(value: { email: string; password: string; }) {
 
     if(this.isInLogin){
       console.log("login");
-      this.isLogged = await this.authService.login(value.username, value.password);
+      this.isLogged = await this.authService.login(value.email, value.password);
       console.log(this.isLogged);
       if (this.isLogged) {
         this.router.navigate(['/tabs/tab1']);
@@ -70,7 +71,7 @@ export class Tab3Page {
       }  
     } else {
       console.log("register");
-      let register = await this.authService.register(value.username, value.password);
+      let register = await this.authService.register(value.email, value.password);
       console.log(register);
       if (register) {
         this.router.navigate(['/tabs/tab1']);
@@ -83,9 +84,9 @@ export class Tab3Page {
 
   }
 
-  async register(value: {username: string; password: string; }) {
+  async register(value: {email: string; password: string; }) {
 
-    let registerOk = await this.authService.register(value.username, value.password);
+    let registerOk = await this.authService.register(value.email, value.password);
     if (registerOk) {
       this.router.navigate(['/tabs/tab1']);
       // TODO: poner un toast de que se ha registrado correctamente y se ha autologeado

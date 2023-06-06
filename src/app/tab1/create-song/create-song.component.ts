@@ -3,6 +3,9 @@ import { Song } from 'src/app/interfaces/song.interface';
 import { SongsService } from 'src/app/services/songs.service';
 import { Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Camera, CameraResultType } from '@capacitor/camera';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { GeolocationService } from 'src/app/services/geolocation.service';
 
 @Component({
   selector: 'app-create-song',
@@ -24,6 +27,12 @@ export class CreateSongComponent  implements OnInit {
     geolocation: [0, 0],
     comments: []
   };
+
+  togglePhoto: string = 'url';
+  photo: SafeResourceUrl | undefined;
+  latitude: number | undefined;
+  longitude: number | undefined;
+  accuracy: number | undefined;
 
   formValidation: FormGroup | undefined; 
   errorMessage: string = ''; 
@@ -59,7 +68,11 @@ export class CreateSongComponent  implements OnInit {
 
  };
 
-  constructor(private songService: SongsService, private formBuilder: FormBuilder, private router: Router) { }
+  constructor(private songService: SongsService,
+     private formBuilder: FormBuilder, 
+     private router: Router,
+     private sanitizer: DomSanitizer,
+     private geolocationService: GeolocationService) { }
 
 
   ngOnInit() {
@@ -97,10 +110,33 @@ export class CreateSongComponent  implements OnInit {
   async insertarCancion() {
     // Realiza una solicitud POST a la API para insertar la canción
     console.log('Insertar canción:', this.song, this.formValidation);
+
+    if(this.photo != undefined) {
+      this.song.image = this.photo.toString();
+    }
+
     let res = await this.songService.createSong(this.song);
 
     console.log('Insertar canción:', res);
     this.router.navigate(['/tabs/tab1']);
+  }
+
+  async takePicture() {
+    const image = await Camera.getPhoto({
+      quality: 100,
+      allowEditing: false,
+      resultType: CameraResultType.Base64
+    });
+
+    if(image && image.base64String)  {
+      this.photo = image.base64String;
+    }
+
+    const position = await this.geolocationService.getCurrentPosition();
+    this.latitude = position.coords.latitude;
+    this.longitude = position.coords.longitude;
+    this.accuracy = position.coords.accuracy;
+
   }
 }
 

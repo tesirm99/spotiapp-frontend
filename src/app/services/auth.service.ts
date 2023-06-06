@@ -1,19 +1,24 @@
 import { Injectable } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor() { 
+  constructor(
+    public afs: AngularFirestore,
+    public afAuth: AngularFireAuth
+  ) {
 
   }
 
-  async login(username: string, password: string): Promise<boolean> {
+  async login(email: string, password: string): Promise<boolean> {
     let res = await fetch('http://localhost:3000/users/signin', {
       method: 'POST',
       body: JSON.stringify({
-        username: username,
+        email: email,
         password: password
       }),
       headers: {
@@ -21,6 +26,9 @@ export class AuthService {
       }
     });
 
+    let res2 = await this.afAuth.signInWithEmailAndPassword(email, password);
+    console.log(res2);
+    
     if(res.status == 200) {
 
       let accessInfo = await res.json();
@@ -30,18 +38,6 @@ export class AuthService {
     } else {
       return false;
     }
-    // .then(async res => {
-    //   let access = await res.json()
-    //   localStorage.setItem('token', access.token);
-    //   localStorage.setItem('id', access.id);
-    //   return true;
-    // })
-    // .catch(error => {
-    //   console.error('Error:', error)
-    //   return false;
-    // });
-    
-    // TODO: login to Firebase
   }
 
 
@@ -49,13 +45,16 @@ export class AuthService {
     let res = await fetch('http://localhost:3000/users/signup', {
       method: 'POST',
       body: JSON.stringify({
-        username: email,
+        email: email,
         password: password
       }),
       headers: {
         'Content-Type': 'application/json'
       }
     });
+
+    let res2 = await this.afAuth.createUserWithEmailAndPassword(email, password);
+    console.log(res2);
 
     if(res.status == 200) {
       let accessInfo = await res.json();
@@ -65,8 +64,6 @@ export class AuthService {
     } else {
       return false;
     }
-
-    // TODO: register in Firebase
   }
 
   logout() {
@@ -95,7 +92,7 @@ export class AuthService {
       let user = await res.text();
       return user;
     } else {
-      return "Jane Doe";
+      return "jane@doe.com";
     }
 
   }

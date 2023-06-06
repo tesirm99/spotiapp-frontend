@@ -3,6 +3,7 @@ import { Song } from '../interfaces/song.interface';
 import { Comment } from '../interfaces/comment.interface';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { GeolocationService } from './geolocation.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class SongsService {
 
   songAPIURL = "http://localhost:3000/songs";
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private geoService: GeolocationService) { }
 
   async getSongs(): Promise<Song[]> {
     let res = await fetch(this.songAPIURL, {
@@ -24,6 +25,7 @@ export class SongsService {
   }
 
   async getSongById(id: string): Promise<Song> {
+    
     let res = await fetch(this.songAPIURL + '/' + id, {
       method: 'GET',
       headers: {
@@ -35,6 +37,10 @@ export class SongsService {
 
   async createSong(song: any) {
     
+    let pos = await this.geoService.getCurrentPosition();
+    song.geolocation = [pos.coords.latitude, pos.coords.longitude];
+    song.comments = [];
+
     let res = await fetch(this.songAPIURL + '/newsong', {
       method: 'POST',
       body: JSON.stringify(song),
@@ -84,9 +90,45 @@ export class SongsService {
   }
 
   async commentToSong(comment: Comment, songId: string) {
+    
+    let pos = await this.geoService.getCurrentPosition();
+    console.log(pos);
+    
+    comment.geolocation = [pos.coords.latitude, pos.coords.longitude];
+    comment.authorId = localStorage.getItem('id')!;
+    console.log(songId);
+    
     let res = await fetch(this.songAPIURL + '/' + songId + '/comments', {
       method: 'POST',
       body: JSON.stringify(comment),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
+      }
+    });
+
+    let json = await res.json();
+
+    console.log(json);
+
+    return json;
+  }
+
+  async getComments(songId: string): Promise<Comment[]> {
+    let res = await fetch(this.songAPIURL + '/' + songId + '/comments', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    console.log(res);
+    
+    return await res.json();
+  }
+
+  async deleteComment(songId: string, commentId: string) {
+    let res = await fetch(this.songAPIURL + '/' + songId + '/comments/' + commentId, {
+      method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + localStorage.getItem('token')

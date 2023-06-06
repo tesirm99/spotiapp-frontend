@@ -17,10 +17,6 @@ const routes: Routes = [
   {
     path: 'details/:id',
     component: SongDetailComponent
-  },
-  {
-    path: 'createComment/:id',
-    component: CreateCommentComponent
   }
 ];
 

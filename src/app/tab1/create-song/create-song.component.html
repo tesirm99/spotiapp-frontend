@@ -1,49 +1,82 @@
-<h2>Insert new song</h2>
-<div *ngIf="formValidation">
-  <div class="formContainer">
-    
-<form class="form" [formGroup]="formValidation" (submit)="insertarCancion()">
-  <ion-item>
-    <ion-label>Title:</ion-label>
-    <ion-input type="text" formControlName="name" [(ngModel)]="song.name"></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label>Artist:</ion-label>
-    <ion-input type="text" formControlName="artist" [(ngModel)]="song.artist"></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label>Album:</ion-label>
-    <ion-input type="text" formControlName="album" [(ngModel)]="song.album"></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label>Release date:</ion-label>
-    <ion-input type="date" formControlName="releaseDate" [(ngModel)]="song.releaseDate"></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label>Genre:</ion-label>
-    <ion-input type="text" formControlName="genre" [(ngModel)]="song.genre"></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label>Duration:</ion-label>
-    <ion-input type="number" formControlName="duration" [(ngModel)]="song.duration"></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label>Image:</ion-label>
-    <ion-input type="text" formControlName="image" [(ngModel)]="song.image"></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label>URL:</ion-label>
-    <ion-input type="text" formControlName="href" [(ngModel)]="song.href"></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label>Popularity:</ion-label>
-    <ion-input type="number" formControlName="popularity" [(ngModel)]="song.popularity"></ion-input>
-  </ion-item>
-  <div>
-    <ion-button type="submit" [disabled]="!formValidation.valid">Insert song</ion-button>
-  </div>
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Create song
+    </ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div *ngIf="formValidation">
+    <div class="formContainer">
+      <form class="form" [formGroup]="formValidation" (submit)="insertarCancion()">
+        <ion-item>
+          <ion-label>Title:</ion-label>
+          <ion-input type="text" formControlName="name" [(ngModel)]="song.name"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label>Artist:</ion-label>
+          <ion-input type="text" formControlName="artist" [(ngModel)]="song.artist"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label>Album:</ion-label>
+          <ion-input type="text" formControlName="album" [(ngModel)]="song.album"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label>Release date:</ion-label>
+          <ion-input type="date" formControlName="releaseDate" [(ngModel)]="song.releaseDate"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label>Genre:</ion-label>
+          <ion-input type="text" formControlName="genre" [(ngModel)]="song.genre"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label>Duration:</ion-label>
+          <ion-input type="number" formControlName="duration" [(ngModel)]="song.duration"></ion-input>
+        </ion-item>
+        <ion-segment [(ngModel)]="togglePhoto">
+          <ion-segment-button value="url">
+            <ion-label>URL</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="img">
+            <ion-label>Imagen</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+        <ion-item>
+          <p>{{togglePhoto}}</p>
+        </ion-item>
+        <ion-item *ngIf="togglePhoto === 'url'">
+          <ion-label position="stacked">URL imagen</ion-label>
+          <ion-input type="text" aria-label="URL" [(ngModel)]="song.image"
+            placeholder="URL de la imagen"></ion-input>
+        </ion-item>
+        <div style="padding: 45px 0;" *ngIf="togglePhoto === 'img'">
+          <ion-img *ngIf="!song.image.includes('https') && song.image != ''"
+            src="'data:image/jpeg;base64,' + song.image"></ion-img>
+          <ion-img *ngIf="!song.image.includes('https') && song.image != ''"
+            [src]="song.image"></ion-img>
+          <ion-fab vertical="bottom" horizontal="center" slot="fixed">
+            <ion-fab-button (click)="takePicture()">
+              <ion-icon name="camera"></ion-icon>
+            </ion-fab-button>
+          </ion-fab>
+        </div>
+        <ion-item>
+          <ion-label>URL:</ion-label>
+          <ion-input type="text" formControlName="href" [(ngModel)]="song.href"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label>Popularity:</ion-label>
+          <ion-input type="number" formControlName="popularity" [(ngModel)]="song.popularity"></ion-input>
+        </ion-item>
+        <div>
+          <ion-button type="submit" [disabled]="!formValidation.valid">Insert song</ion-button>
+        </div>
   
-</form>
-
-</div>
+      </form>
+  
+    </div>
   </div>
+</ion-content>

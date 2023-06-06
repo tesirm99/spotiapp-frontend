@@ -4,4 +4,6 @@ export interface Comment {
     commentText: string;
     date: string;
     stars: number;
+    geolocation: [number, number];
+    authorId: string;
 }
