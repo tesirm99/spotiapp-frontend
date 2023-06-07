@@ -36,9 +36,9 @@ jobs:
       - name: Run E2E tests
         run: npm run e2e
 
-  build-and-push:
+  build-and-push-front:
     runs-on: ubuntu-latest
-
+    steps:
       - uses: actions/checkout@v3
       - name: Authenticate to Google Cloud
         id: auth
