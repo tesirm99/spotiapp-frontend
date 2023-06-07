@@ -7,8 +7,11 @@ on:
 jobs:
   build-and-push-front:
     runs-on: ubuntu-latest
-    - name: Checkout repository
-        uses: actions/checkout@v2
+
+    steps:
+
+      - name: Checkout repository
+          uses: actions/checkout@v2
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
@@ -33,7 +36,6 @@ jobs:
       - name: Run E2E tests
         run: npm run e2e
 
-    steps:
       - uses: actions/checkout@v3
       - name: Authenticate to Google Cloud
         id: auth
