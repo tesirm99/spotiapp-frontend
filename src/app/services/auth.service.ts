@@ -29,7 +29,7 @@ export class AuthService {
     let res2 = await this.afAuth.signInWithEmailAndPassword(email, password);
     console.log(res2);
     
-    if(res.status == 200) {
+    if(res.status == 200 && res2.user) {
 
       let accessInfo = await res.json();
       localStorage.setItem('token', accessInfo.token);
@@ -56,7 +56,7 @@ export class AuthService {
     let res2 = await this.afAuth.createUserWithEmailAndPassword(email, password);
     console.log(res2);
 
-    if(res.status == 200) {
+    if(res.status == 200 && res2.user) {
       let accessInfo = await res.json();
       localStorage.setItem('token', accessInfo.token);
       localStorage.setItem('id', accessInfo.id);
