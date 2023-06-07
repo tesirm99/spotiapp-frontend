@@ -7,7 +7,6 @@ import { ListComponent } from './list/list.component';
 import { CreateSongComponent } from './create-song/create-song.component';
 import { Tab1PageRoutingModule } from './tab1-routing.module';
 import { SongDetailComponent } from './song-detail/song-detail.component';
-import { CreateCommentComponent } from './create-comment/create-comment.component';
 import { CommentsComponent } from './comments/comments.component';
 
 @NgModule({
@@ -18,7 +17,7 @@ import { CommentsComponent } from './comments/comments.component';
     ReactiveFormsModule,
     Tab1PageRoutingModule
   ],
-  declarations: [Tab1Page, ListComponent, CreateSongComponent, SongDetailComponent, CreateCommentComponent, CommentsComponent],
+  declarations: [Tab1Page, ListComponent, CreateSongComponent, SongDetailComponent, CommentsComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class Tab1PageModule {}

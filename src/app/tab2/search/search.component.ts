@@ -24,7 +24,10 @@ export class SearchComponent  implements OnInit {
 
   async ngOnInit() {
 
-    this.isLogged = this.authService.isLogged();
+    this.authService.isLogged().subscribe(loggedIn => {
+      this.isLogged = loggedIn;
+      // Realiza cualquier acción adicional que necesites al cambiar el estado de autenticación
+    });
 
   }
 

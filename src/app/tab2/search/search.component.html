@@ -17,9 +17,9 @@
       <label>Use Spotify</label>
     </div>
     <div class="filterItem">
-      <input  type="text" [(ngModel)]="terminoBusqueda" *ngIf="tipoBusqueda !== 'fecha'" placeholder="Search"/>
+      <input id="searchInput" type="text" [(ngModel)]="terminoBusqueda" *ngIf="tipoBusqueda !== 'fecha'" placeholder="Search"/>
       <input  type="date" [(ngModel)]="terminoBusqueda" *ngIf="tipoBusqueda === 'fecha'"/>
-      <button (click)="buscar()">Search</button>
+      <button id="searchBtn" (click)="buscar()">Search</button>
     </div>
   </div>
   <div>

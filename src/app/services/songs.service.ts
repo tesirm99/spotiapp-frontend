@@ -57,7 +57,8 @@ export class SongsService {
       method: 'PUT',
       body: JSON.stringify(song),
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
       }
     });
     return await res.json();
@@ -67,7 +68,8 @@ export class SongsService {
     let res = await fetch(this.songAPIURL + '/' + id, {
       method: 'DELETE',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
       }
     });
     return await res.json();
@@ -109,8 +111,6 @@ export class SongsService {
 
     let json = await res.json();
 
-    console.log(json);
-
     return json;
   }
 
@@ -136,5 +136,6 @@ export class SongsService {
     });
     return await res.json();
   }
+
 
 }

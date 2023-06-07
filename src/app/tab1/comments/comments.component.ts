@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AlertController, IonicModule } from '@ionic/angular';
+import { AlertController, IonicModule, ToastController } from '@ionic/angular';
 import { SongsService } from 'src/app/services/songs.service';
 import { Comment } from 'src/app/interfaces/comment.interface'
 import { AuthService } from 'src/app/services/auth.service';
@@ -21,11 +21,14 @@ export class CommentsComponent  implements OnInit {
   comments: Comment[] | undefined;
   hideDelete: boolean = true;
 
-  constructor(private songService: SongsService, private alertController: AlertController, private authService: AuthService) { }
+  constructor(private songService: SongsService, private alertController: AlertController, private authService: AuthService, private toastCtrl: ToastController) { }
 
   ngOnInit() {
     this.getComments();
-    this.hideDelete = this.authService.isLogged();
+    this.authService.isLogged().subscribe(loggedIn => {
+      this.hideDelete = loggedIn;
+      // Realiza cualquier acción adicional que necesites al cambiar el estado de autenticación
+    });
   }
 
   async sendComment() {
@@ -41,15 +44,21 @@ export class CommentsComponent  implements OnInit {
       }
 
       let res = await this.songService.commentToSong(comment, this.songId);
-      if (res) {
+      console.log(res);
+      
+      if (res.length > 0) {
         this.getComments();
         this.author = undefined;
         this.commentText = undefined;
         this.stars = 0;
+        await this.presentToast('bottom', 'Comment added successfully');
+      } else {
+        await this.presentToast('bottom', 'Error adding comment');
       }
 
     }
   }
+
 
   async getComments() {
     console.log(this.songId);
@@ -63,7 +72,10 @@ export class CommentsComponent  implements OnInit {
   async deleteComment(commentId: string) {
     if (!this.songId) return;
     const response = await this.songService.deleteComment(this.songId, commentId);
-    if (response) this.getComments();
+    if (response){
+      this.getComments();
+      await this.presentToast('bottom', 'Comment deleted successfully');
+    } 
   }
 
   handleDeleteAlert(commentId: string) {
@@ -84,6 +96,16 @@ export class CommentsComponent  implements OnInit {
         },
       ]
     }).then(alert => alert.present());
+  }
+
+  async presentToast(position: 'top' | 'middle' | 'bottom', message: string) {
+    const toast = await this.toastCtrl.create({
+      message: message,
+      duration: 1500,
+      position: position,
+    });
+
+    await toast.present();
   }
 
 }

@@ -2,31 +2,60 @@
   <ion-header [translucent]="true">
     <ion-toolbar>
       <ion-buttons slot="start">
-        <ion-back-button></ion-back-button>
+        <ion-back-button defaultHref="#"></ion-back-button>
       </ion-buttons>
       <ion-title *ngIf="song">
         {{ song.name }} details
       </ion-title>
     </ion-toolbar>
   </ion-header>
+<div style="display:grid; place-items: center;">
 
-  <ion-card *ngIf="song">
-    <h1>{{song.name}}</h1>
-    <h2>{{song.artist}}</h2>
-    <img [src]="song.image" alt="song image">
-    <span>Duration: {{song.duration}} min</span>
-    <span>Genre: {{song.genre}}</span>
-    <span>Released on: {{song.releaseDate}}</span>
-    <span>Album: {{song.album}}</span>
-    <span>Popularity: {{ song.popularity }}</span>
-    <span>Added from: {{ song.geolocation}}</span>
-    <!--div> Da problemas de CORS xd
-      <audio [src]="song.href"></audio>
-    </div-->
+  <ion-card *ngIf="song" style="width:500px;">
+    <ion-card-header>
+      <ion-card-subtitle>{{song.artist}}</ion-card-subtitle>
+      <ion-card-title>{{song.name}}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <div style="display:grid; place-items:center; width: 100%; height:100%">
+              <img [src]="song.image" alt="song image"/>
+            </div>
+          </ion-col>
+          <ion-col>
+            <ion-list>
+              <ion-item>
+                <ion-label>Duration: {{song.duration}}</ion-label>
+              </ion-item>
+              <ion-item>
+                <ion-label>Genre: {{song.genre}}</ion-label>
+              </ion-item>
+              <ion-item>
+                <ion-label>Released on: {{song.releaseDate}}</ion-label>
+              </ion-item>
+              <ion-item>
+                <ion-label>Album: {{song.album}}</ion-label>
+              </ion-item>
+              <ion-item>
+                <ion-label>Popularity: {{ song.popularity }}</ion-label>
+              </ion-item>
+              <ion-item>
+                <ion-label>Added from: {{ song.geolocation}}</ion-label>
+              </ion-item>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+      </ion-grid>     
+    </ion-card-content>
+    <ion-button (click)="handleDeleteAlert(song._id!)" color="danger">
+      Delete
+    </ion-button>
+    
   </ion-card>
-  <ion-button (click)="addComment()">Add comment</ion-button>
+</div>
 <div *ngIf="song">
   <app-comments [songId]="song._id"></app-comments>
-
 </div>
 </ion-content>

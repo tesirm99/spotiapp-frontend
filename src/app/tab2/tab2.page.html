@@ -3,6 +3,12 @@
     <ion-title>
       Search
     </ion-title>
+    <ion-buttons *ngIf="this.isLogged" slot="end">
+      <ion-button (click)="logout()">
+        Logout 
+        <ion-icon name="log-out-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 

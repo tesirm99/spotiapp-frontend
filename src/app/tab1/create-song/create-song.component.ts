@@ -28,7 +28,7 @@ export class CreateSongComponent  implements OnInit {
     comments: []
   };
 
-  togglePhoto: string = 'url';
+  togglePhoto: string = "img";
   photo: SafeResourceUrl | undefined;
   latitude: number | undefined;
   longitude: number | undefined;

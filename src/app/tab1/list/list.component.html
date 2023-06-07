@@ -13,7 +13,12 @@
             <h2>{{ song.name }}</h2>
             <p>{{ song.artist }}</p>
           </ion-label>
-          <ion-button (click)="goToSongDetail(song._id!)">View</ion-button>
+          <ion-buttons>
+            <ion-button (click)="goToSongDetail(song._id!)">View</ion-button>
+            <ion-fab-button *ngIf="isLogged" color="danger" size="small" (click)="handleDeleteAlert(song)">
+              <ion-icon name="close-circle"></ion-icon>
+            </ion-fab-button>
+          </ion-buttons>
         </ion-item>
       </ion-list>
     </div>

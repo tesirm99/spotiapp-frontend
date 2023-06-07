@@ -11,8 +11,15 @@ export class Tab2Page {
   isLogged: boolean = false;
   constructor(private authService: AuthService) {}
 
-  ngDoCheck() {
-    this.isLogged = this.authService.isLogged();
+  ngInit() {
+    this.authService.isLogged().subscribe(loggedIn => {
+      this.isLogged = loggedIn;
+      // Realiza cualquier acción adicional que necesites al cambiar el estado de autenticación
+    });
+  }
+
+  logout() {
+    this.authService.logout();
   }
 
 }

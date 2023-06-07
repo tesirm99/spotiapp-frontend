@@ -34,7 +34,10 @@ export class Tab3Page {
     //getUserdata
     this.userData.name = "test";
 
-    this.isLogged = this.authService.isLogged();
+    this.authService.isLogged().subscribe(loggedIn => {
+      this.isLogged = loggedIn;
+      // Realiza cualquier acción adicional que necesites al cambiar el estado de autenticación
+    });
 
     this.formValidation = this.formBuilder.group({
       email: new FormControl('', Validators.compose([
@@ -48,10 +51,6 @@ export class Tab3Page {
     });
   }
   
-  ngDoCheck() {
-    this.isLogged = this.authService.isLogged();
-  }
-
   logout() {
     this.authService.logout();
     this.isLogged = false;

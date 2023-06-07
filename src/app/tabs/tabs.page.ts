@@ -14,16 +14,15 @@ export class TabsPage {
   constructor(private authService: AuthService) {}
 
   ngOnInit() {
-    this.isLogged = this.authService.isLogged();
-    if (this.isLogged) {
-      this.tab3Text = 'Profile'
-    } else {
-      this.tab3Text = 'Login'
-    }
-  }
-
-  ngDoCheck() {
-    this.isLogged = this.authService.isLogged();
+    this.authService.isLogged().subscribe(loggedIn => {
+      this.isLogged = loggedIn;
+      if(this.isLogged) {
+        this.tab3Text = 'Profile';
+      } else {
+        this.tab3Text = 'Login';
+      }
+      // Realiza cualquier acción adicional que necesites al cambiar el estado de autenticación
+    });
   }
 
 }

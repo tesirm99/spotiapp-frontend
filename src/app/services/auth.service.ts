@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+
+  private isLoggedIn = new BehaviorSubject<boolean>(false);
 
   constructor(
     public afs: AngularFirestore,
@@ -22,7 +25,8 @@ export class AuthService {
         password: password
       }),
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
       }
     });
 
@@ -34,6 +38,7 @@ export class AuthService {
       let accessInfo = await res.json();
       localStorage.setItem('token', accessInfo.token);
       localStorage.setItem('id', accessInfo.id);
+      this.isLoggedIn.next(true);
       return true;
     } else {
       return false;
@@ -60,6 +65,7 @@ export class AuthService {
       let accessInfo = await res.json();
       localStorage.setItem('token', accessInfo.token);
       localStorage.setItem('id', accessInfo.id);
+      this.isLoggedIn.next(true);
       return true;
     } else {
       return false;
@@ -69,14 +75,11 @@ export class AuthService {
   logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('id');
+    this.isLoggedIn.next(false);
   }
 
-  isLogged(): boolean {
-    if(localStorage.getItem('token')) {
-      return true;
-    } else {
-      return false;
-    }
+  isLogged() {
+    return this.isLoggedIn.asObservable();
   }
 
   async getUser(): Promise<string> {

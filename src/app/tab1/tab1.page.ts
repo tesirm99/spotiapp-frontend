@@ -13,16 +13,15 @@ export class Tab1Page {
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit() {
-    this.isLogged = this.authService.isLogged();
+    this.authService.isLogged().subscribe(loggedIn => {
+      this.isLogged = loggedIn;
+      // Realiza cualquier acción adicional que necesites al cambiar el estado de autenticación
+    });
   }
 
-  ngDoCheck() {
-    this.isLogged = this.authService.isLogged();
-  }
 
   logout() {
-    localStorage.removeItem('token');
-    this.isLogged = false;
+    this.authService.logout();
   }
 
   goToInsertSong() {
